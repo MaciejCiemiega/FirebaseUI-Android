@@ -23,11 +23,11 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 public class IDPBaseActivity extends AppCompatBase {
-    protected AuthCredential createCredential(IDPResponse idpSignInResponse) {
+    AuthCredential createCredential(IDPResponse idpSignInResponse) {
         if (idpSignInResponse.getProviderType().equalsIgnoreCase(FacebookAuthProvider.PROVIDER_ID)) {
             return FacebookProvider.createAuthCredential(idpSignInResponse);
         } else if (idpSignInResponse.getProviderType().equalsIgnoreCase(GoogleAuthProvider
-                .PROVIDER_ID)) {
+                                                                                .PROVIDER_ID)) {
             return GoogleProvider.createAuthCredential(idpSignInResponse);
         }
         return null;

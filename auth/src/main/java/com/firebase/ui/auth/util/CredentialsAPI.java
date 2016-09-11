@@ -40,7 +40,7 @@ public class CredentialsAPI implements
         GoogleApiClient.OnConnectionFailedListener {
     private static final int RC_CREDENTIALS_READ = 2;
     private static final String TAG = "CredentialsAPI";
-
+    private final CallbackInterface mCallback;
     private GoogleApiClient mGoogleApiClient;
     private boolean mAutoSignInAvailable;
     private boolean mSignInResolutionNeeded;
@@ -48,12 +48,7 @@ public class CredentialsAPI implements
     private CredentialRequestResult mCredentialRequestResult;
     private ProgressDialog mProgressDialog;
     private Credential mCredential;
-    private final CallbackInterface mCallback;
     private PlayServicesHelper mPlayServicesHelper;
-
-    public interface CallbackInterface {
-        void onAsyncTaskFinished();
-    }
 
     public CredentialsAPI(Activity activity, CallbackInterface callback) {
         mAutoSignInAvailable = false;
@@ -127,10 +122,12 @@ public class CredentialsAPI implements
     }
 
     @Override
-    public void onConnected(@Nullable Bundle bundle) {}
+    public void onConnected(@Nullable Bundle bundle) {
+    }
 
     @Override
-    public void onConnectionSuspended(int cause) {}
+    public void onConnectionSuspended(int cause) {
+    }
 
     private void initGoogleApiClient(String accountName) {
         GoogleSignInOptions.Builder gsoBuilder = new GoogleSignInOptions
@@ -168,7 +165,7 @@ public class CredentialsAPI implements
         }
     }
 
-    public void requestCredentials(final boolean shouldResolve, boolean onlyPasswords) {
+    private void requestCredentials(final boolean shouldResolve, boolean onlyPasswords) {
         if (!mPlayServicesHelper.isPlayServicesAvailable()) {
             // TODO(samstern): it would probably be better to not actually call the method
             // in this case.
@@ -187,7 +184,7 @@ public class CredentialsAPI implements
                 .setResultCallback(
                         new ResultCallback<CredentialRequestResult>() {
                             @Override
-                            public void onResult(CredentialRequestResult credentialRequestResult) {
+                            public void onResult(@NonNull CredentialRequestResult credentialRequestResult) {
                                 mCredentialRequestResult = credentialRequestResult;
                                 Status status = credentialRequestResult.getStatus();
 
@@ -230,7 +227,7 @@ public class CredentialsAPI implements
 
     public void onStop() {
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();;
+            mGoogleApiClient.disconnect();
         }
 
         hideProgress();
@@ -255,13 +252,17 @@ public class CredentialsAPI implements
         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                 new ResultCallback<Status>() {
                     @Override
-                    public void onResult(Status status) {
+                    public void onResult(@NonNull Status status) {
                         mCallback.onAsyncTaskFinished();
                     }
                 });
     }
 
-    public void disableAutoSignIn() {
+    private void disableAutoSignIn() {
         Auth.CredentialsApi.disableAutoSignIn(mGoogleApiClient);
+    }
+
+    public interface CallbackInterface {
+        void onAsyncTaskFinished();
     }
 }

@@ -50,22 +50,32 @@ public class WelcomeBackIDPPrompt extends AppCompatBase
 
     private static final String TAG = "WelcomeBackIDPPrompt";
     private IDPProvider mIdpProvider;
-    private String mProviderId;
     private IDPResponse mPrevIdpResponse;
     private AuthCredential mPrevCredential;
 
+    public static Intent createIntent(
+            Context context,
+            FlowParameters flowParams,
+            String providerId,
+            IDPResponse idpResponse,
+            String email) {
+        return ActivityHelper.createBaseIntent(context, WelcomeBackIDPPrompt.class, flowParams)
+                .putExtra(ExtraConstants.EXTRA_PROVIDER, providerId)
+                .putExtra(ExtraConstants.EXTRA_IDP_RESPONSE, idpResponse)
+                .putExtra(ExtraConstants.EXTRA_EMAIL, email);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mProviderId = getProviderIdFromIntent();
+        String providerId = getProviderIdFromIntent();
         mPrevIdpResponse = getIntent().getParcelableExtra(ExtraConstants.EXTRA_IDP_RESPONSE);
         setContentView(R.layout.welcome_back_idp_prompt_layout);
 
         mIdpProvider = null;
-        for (IDPProviderParcel providerParcel: mActivityHelper.getFlowParams().providerInfo) {
-            if (mProviderId.equals(providerParcel.getProviderType())) {
-                switch (mProviderId) {
+        for (IDPProviderParcel providerParcel : mActivityHelper.getFlowParams().providerInfo) {
+            if (providerId.equals(providerParcel.getProviderType())) {
+                switch (providerId) {
                     case GoogleAuthProvider.PROVIDER_ID:
                         mIdpProvider = new GoogleProvider(
                                 this,
@@ -76,7 +86,7 @@ public class WelcomeBackIDPPrompt extends AppCompatBase
                         mIdpProvider = new FacebookProvider(this, providerParcel);
                         break;
                     default:
-                        Log.w(TAG, "Unknown provider: " + mProviderId);
+                        Log.w(TAG, "Unknown provider: " + providerId);
                         finish(RESULT_CANCELED, getIntent());
                         return;
                 }
@@ -190,19 +200,7 @@ public class WelcomeBackIDPPrompt extends AppCompatBase
         }
     }
 
-    public static Intent createIntent(
-            Context context,
-            FlowParameters flowParams,
-            String providerId,
-            IDPResponse idpResponse,
-            String email) {
-        return ActivityHelper.createBaseIntent(context, WelcomeBackIDPPrompt.class, flowParams)
-                .putExtra(ExtraConstants.EXTRA_PROVIDER, providerId)
-                .putExtra(ExtraConstants.EXTRA_IDP_RESPONSE, idpResponse)
-                .putExtra(ExtraConstants.EXTRA_EMAIL, email);
-    }
-
-    private class FinishListener implements OnCompleteListener {
+    private class FinishListener implements OnCompleteListener<AuthResult> {
         @Override
         public void onComplete(@NonNull Task task) {
             mActivityHelper.dismissDialog();

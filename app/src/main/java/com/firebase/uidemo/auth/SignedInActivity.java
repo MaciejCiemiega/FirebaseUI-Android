@@ -47,7 +47,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SignedInActivity extends AppCompatActivity {
-
     @BindView(android.R.id.content)
     View mRootView;
 
@@ -62,6 +61,12 @@ public class SignedInActivity extends AppCompatActivity {
 
     @BindView(R.id.user_enabled_providers)
     TextView mEnabledProviders;
+
+    public static Intent createIntent(Context context) {
+        Intent in = new Intent();
+        in.setClass(context, SignedInActivity.class);
+        return in;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -178,11 +183,5 @@ public class SignedInActivity extends AppCompatActivity {
     private void showSnackbar(@StringRes int errorMessageRes) {
         Snackbar.make(mRootView, errorMessageRes, Snackbar.LENGTH_LONG)
                 .show();
-    }
-
-    public static Intent createIntent(Context context) {
-        Intent in = new Intent();
-        in.setClass(context, SignedInActivity.class);
-        return in;
     }
 }

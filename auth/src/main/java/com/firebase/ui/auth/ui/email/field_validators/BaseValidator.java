@@ -17,15 +17,15 @@ package com.firebase.ui.auth.ui.email.field_validators;
 import android.support.design.widget.TextInputLayout;
 
 public class BaseValidator {
-    protected TextInputLayout mErrorContainer;
-    protected String mErrorMessage = "";
-    protected String mEmptyMessage = null;
+    TextInputLayout mErrorContainer;
+    String mErrorMessage = "";
+    String mEmptyMessage = null;
 
-    public BaseValidator(TextInputLayout errorContainer) {
+    BaseValidator(TextInputLayout errorContainer) {
         mErrorContainer = errorContainer;
     }
 
-    protected boolean isValid(CharSequence charSequence) {
+    boolean isValid(CharSequence charSequence) {
         return true;
     }
 

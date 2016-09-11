@@ -24,12 +24,12 @@ public class PlayServicesHelper {
 
     private final Context mContext;
 
-    public static PlayServicesHelper getInstance(Context context) {
-        return new PlayServicesHelper(context);
-    }
-
     private PlayServicesHelper(Context context) {
         this.mContext = context;
+    }
+
+    public static PlayServicesHelper getInstance(Context context) {
+        return new PlayServicesHelper(context);
     }
 
     /**
@@ -45,7 +45,7 @@ public class PlayServicesHelper {
      * Returns {@code true} if Google Play Services is either already available or can be made
      * available with user action, {@code false} otherwise.
      */
-    public boolean canMakePlayServicesAvailable() {
+    private boolean canMakePlayServicesAvailable() {
         // Check if already available
         if (isPlayServicesAvailable()) {
             return true;
@@ -63,11 +63,12 @@ public class PlayServicesHelper {
 
     /**
      * Kick off the process to make Play Services available if necessary and possible.
-     * @param activity the Activity that will host necessary dialogs.
-     * @param requestCode a request code to be used to return results to the Activity.
+     *
+     * @param activity       the Activity that will host necessary dialogs.
+     * @param requestCode    a request code to be used to return results to the Activity.
      * @param cancelListener (optional) a Dialog listener if the user cancels the recommended action.
      * @return {@code true} if a resolution is launched or if a resolution was not necessary,
-     *         {@code false otherwise}.
+     * {@code false otherwise}.
      */
     public boolean makePlayServicesAvailable(
             @NonNull Activity activity,
@@ -87,7 +88,7 @@ public class PlayServicesHelper {
         // Get an error dialog for the error code
         int errorCode = sApiAvailability.isGooglePlayServicesAvailable(activity);
         Dialog dialog = sApiAvailability.getErrorDialog(activity, errorCode, requestCode,
-                cancelListener);
+                                                        cancelListener);
 
         // Display the dialog, if possible
         if (dialog != null) {

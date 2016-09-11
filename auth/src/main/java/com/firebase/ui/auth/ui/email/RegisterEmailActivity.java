@@ -66,7 +66,14 @@ public class RegisterEmailActivity extends AppCompatBase implements View.OnClick
     private EmailFieldValidator mEmailFieldValidator;
     private PasswordFieldValidator mPasswordFieldValidator;
     private RequiredFieldValidator mNameValidator;
-    private ImageView mTogglePasswordImage;
+
+    public static Intent createIntent(
+            Context context,
+            FlowParameters flowParams,
+            String email) {
+        return ActivityHelper.createBaseIntent(context, RegisterEmailActivity.class, flowParams)
+                .putExtra(ExtraConstants.EXTRA_EMAIL, email);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,24 +90,24 @@ public class RegisterEmailActivity extends AppCompatBase implements View.OnClick
         getResources().getValue(R.dimen.slightly_visible_icon, slightlyVisibleIcon, true);
 
         mPasswordEditText = (EditText) findViewById(R.id.password);
-        mTogglePasswordImage = (ImageView) findViewById(R.id.toggle_visibility);
+        ImageView togglePasswordImage = (ImageView) findViewById(R.id.toggle_visibility);
 
         mPasswordEditText.setOnFocusChangeListener(new ImageFocusTransparencyChanger(
-                mTogglePasswordImage,
+                togglePasswordImage,
                 visibleIcon.getFloat(),
                 slightlyVisibleIcon.getFloat()));
 
-        mTogglePasswordImage.setOnClickListener(new PasswordToggler(mPasswordEditText));
+        togglePasswordImage.setOnClickListener(new PasswordToggler(mPasswordEditText));
 
         mNameEditText = (EditText) findViewById(R.id.name);
 
         mPasswordFieldValidator = new PasswordFieldValidator((TextInputLayout)
-                findViewById(R.id.password_layout),
-                getResources().getInteger(R.integer.min_password_length));
+                                                                     findViewById(R.id.password_layout),
+                                                             getResources().getInteger(R.integer.min_password_length));
         mNameValidator = new RequiredFieldValidator((TextInputLayout)
-                findViewById(R.id.name_layout));
+                                                            findViewById(R.id.name_layout));
         mEmailFieldValidator = new EmailFieldValidator((TextInputLayout) findViewById(R.id
-                .email_layout));
+                                                                                              .email_layout));
 
         if (email != null) {
             mEmailEditText.setText(email);
@@ -222,13 +229,5 @@ public class RegisterEmailActivity extends AppCompatBase implements View.OnClick
                 registerUser(email, name, password);
             }
         }
-    }
-
-    public static Intent createIntent(
-            Context context,
-            FlowParameters flowParams,
-            String email) {
-        return ActivityHelper.createBaseIntent(context, RegisterEmailActivity.class, flowParams)
-                .putExtra(ExtraConstants.EXTRA_EMAIL, email);
     }
 }

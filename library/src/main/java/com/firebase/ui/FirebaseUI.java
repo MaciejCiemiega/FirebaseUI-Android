@@ -19,7 +19,7 @@ package com.firebase.ui;
  * able to publish the monolith as a pom with only dependencies and no code but Android gradle
  * does not respect that properly.
  */
-public class FirebaseUI {
+class FirebaseUI {
 
     public static final String NAME = "FirebaseUI";
 

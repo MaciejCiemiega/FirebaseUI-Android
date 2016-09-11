@@ -50,7 +50,14 @@ public class SignInActivity extends AppCompatBase implements View.OnClickListene
     private EditText mPasswordEditText;
     private EmailFieldValidator mEmailValidator;
     private RequiredFieldValidator mPasswordValidator;
-    private ImageView mTogglePasswordImage;
+
+    public static Intent createIntent(
+            Context context,
+            FlowParameters flowParams,
+            String email) {
+        return ActivityHelper.createBaseIntent(context, SignInActivity.class, flowParams)
+                .putExtra(ExtraConstants.EXTRA_EMAIL, email);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,21 +75,21 @@ public class SignInActivity extends AppCompatBase implements View.OnClickListene
         getResources().getValue(R.dimen.slightly_visible_icon, slightlyVisibleIcon, true);
 
         mPasswordEditText = (EditText) findViewById(R.id.password);
-        mTogglePasswordImage = (ImageView) findViewById(R.id.toggle_visibility);
+        ImageView togglePasswordImage = (ImageView) findViewById(R.id.toggle_visibility);
 
         mPasswordEditText.setOnFocusChangeListener(new ImageFocusTransparencyChanger(
-                mTogglePasswordImage,
+                togglePasswordImage,
                 visibleIcon.getFloat(),
                 slightlyVisibleIcon.getFloat()));
 
-        mTogglePasswordImage.setOnClickListener(new PasswordToggler(mPasswordEditText));
+        togglePasswordImage.setOnClickListener(new PasswordToggler(mPasswordEditText));
 
         mEmailValidator = new EmailFieldValidator((TextInputLayout) findViewById(R.id
-                .email_layout));
+                                                                                         .email_layout));
         mPasswordValidator = new RequiredFieldValidator((TextInputLayout) findViewById(R.id
-                .password_layout));
+                                                                                               .password_layout));
         Button signInButton = (Button) findViewById(R.id.button_done);
-        TextView recoveryButton =  (TextView) findViewById(R.id.trouble_signing_in);
+        TextView recoveryButton = (TextView) findViewById(R.id.trouble_signing_in);
 
         if (email != null) {
             mEmailEditText.setText(email);
@@ -90,11 +97,6 @@ public class SignInActivity extends AppCompatBase implements View.OnClickListene
         signInButton.setOnClickListener(this);
         recoveryButton.setOnClickListener(this);
 
-    }
-
-    @Override
-    public void onBackPressed () {
-        super.onBackPressed();
     }
 
     private void signIn(String email, final String password) {
@@ -139,27 +141,15 @@ public class SignInActivity extends AppCompatBase implements View.OnClickListene
         if (view.getId() == R.id.button_done) {
             boolean emailValid = mEmailValidator.validate(mEmailEditText.getText());
             boolean passwordValid = mPasswordValidator.validate(mPasswordEditText.getText());
-            if (!emailValid || !passwordValid) {
-                return;
-            } else {
+            if (emailValid && passwordValid) {
                 mActivityHelper.showLoadingDialog(R.string.progress_dialog_signing_in);
                 signIn(mEmailEditText.getText().toString(), mPasswordEditText.getText().toString());
-                return;
             }
         } else if (view.getId() == R.id.trouble_signing_in) {
             startActivity(RecoverPasswordActivity.createIntent(
                     this,
                     mActivityHelper.getFlowParams(),
                     mEmailEditText.getText().toString()));
-            return;
         }
-    }
-
-    public static Intent createIntent(
-            Context context,
-            FlowParameters flowParams,
-            String email) {
-        return ActivityHelper.createBaseIntent(context, SignInActivity.class, flowParams)
-                .putExtra(ExtraConstants.EXTRA_EMAIL, email);
     }
 }

@@ -14,8 +14,6 @@
 
 package com.firebase.ui.auth;
 
-import static junit.framework.Assert.assertEquals;
-
 import android.content.Intent;
 
 import com.firebase.ui.auth.test_helpers.CustomRobolectricGradleTestRunner;
@@ -30,6 +28,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+
+import static junit.framework.Assert.assertEquals;
 
 @RunWith(CustomRobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)

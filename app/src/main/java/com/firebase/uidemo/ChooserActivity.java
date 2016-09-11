@@ -17,6 +17,7 @@ package com.firebase.uidemo;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,18 +34,17 @@ import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 
 public class ChooserActivity extends AppCompatActivity {
-
     private static final Class[] CLASSES = new Class[]{
             ChatActivity.class,
             AuthUiActivity.class,
     };
 
-    private static final int[] DESCRIPTION_NAMES = new int[] {
+    private static final int[] DESCRIPTION_NAMES = new int[]{
             R.string.name_chat,
             R.string.name_auth_ui
     };
 
-    private static final int[] DESCRIPTION_IDS = new int[] {
+    private static final int[] DESCRIPTION_IDS = new int[]{
             R.string.desc_chat,
             R.string.desc_auth_ui
     };
@@ -82,8 +82,9 @@ public class ChooserActivity extends AppCompatActivity {
             mClasses = objects;
         }
 
+        @NonNull
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             View view = convertView;
 
             if (convertView == null) {

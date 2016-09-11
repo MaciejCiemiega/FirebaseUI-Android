@@ -48,10 +48,9 @@ import com.google.firebase.database.Query;
 
 public class ChatActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener {
 
-    public static final String TAG = "RecyclerViewDemo";
+    private static final String TAG = "RecyclerViewDemo";
 
     private FirebaseAuth mAuth;
-    private DatabaseReference mRef;
     private DatabaseReference mChatRef;
     private Button mSendButton;
     private EditText mMessageEdit;
@@ -71,8 +70,7 @@ public class ChatActivity extends AppCompatActivity implements FirebaseAuth.Auth
         mSendButton = (Button) findViewById(R.id.sendButton);
         mMessageEdit = (EditText) findViewById(R.id.messageEdit);
 
-        mRef = FirebaseDatabase.getInstance().getReference();
-        mChatRef = mRef.child("chats");
+        mChatRef = FirebaseDatabase.getInstance().getReference().child("chats");
 
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,21 +175,21 @@ public class ChatActivity extends AppCompatActivity implements FirebaseAuth.Auth
                         Log.d(TAG, "signInAnonymously:onComplete:" + task.isSuccessful());
                         if (task.isSuccessful()) {
                             Toast.makeText(ChatActivity.this, "Signed In",
-                                    Toast.LENGTH_SHORT).show();
+                                           Toast.LENGTH_SHORT).show();
                             attachRecyclerViewAdapter();
                         } else {
                             Toast.makeText(ChatActivity.this, "Sign In Failed",
-                                    Toast.LENGTH_SHORT).show();
+                                           Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
 
-    public boolean isSignedIn() {
+    private boolean isSignedIn() {
         return (mAuth.getCurrentUser() != null);
     }
 
-    public void updateUI() {
+    private void updateUI() {
         // Sending only allowed when signed in
         mSendButton.setEnabled(isSignedIn());
         mMessageEdit.setEnabled(isSignedIn());

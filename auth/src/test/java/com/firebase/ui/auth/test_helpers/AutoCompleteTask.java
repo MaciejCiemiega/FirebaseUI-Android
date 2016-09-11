@@ -26,10 +26,10 @@ import com.google.android.gms.tasks.Task;
 import java.util.concurrent.Executor;
 
 public class AutoCompleteTask<TResult> extends Task {
-    TResult mResult;
-    boolean mComplete;
-    boolean mSuccess;
-    Exception mException;
+    private TResult mResult;
+    private boolean mComplete;
+    private boolean mSuccess;
+    private Exception mException;
 
     public AutoCompleteTask(TResult result, boolean complete, @Nullable Exception exception) {
         mResult = result;

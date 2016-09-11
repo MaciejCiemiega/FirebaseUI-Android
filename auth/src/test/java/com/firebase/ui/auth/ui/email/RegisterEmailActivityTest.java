@@ -91,8 +91,8 @@ public class RegisterEmailActivityTest {
         assertEquals(
                 passwordLayout.getError().toString(),
                 String.format(registerEmailActivity.getString(R.string.password_length),
-                        registerEmailActivity.getResources().getInteger(
-                                R.integer.min_password_length)));
+                              registerEmailActivity.getResources().getInteger(
+                                      R.integer.min_password_length)));
     }
 
     @Test
@@ -113,9 +113,9 @@ public class RegisterEmailActivityTest {
                 .thenReturn(new AutoCompleteTask<Void>(null, true, null));
 
         when(ActivityHelperShadow.firebaseAuth
-                .createUserWithEmailAndPassword(
-                        TestConstants.EMAIL,
-                        TestConstants.PASSWORD))
+                     .createUserWithEmailAndPassword(
+                             TestConstants.EMAIL,
+                             TestConstants.PASSWORD))
                 .thenReturn(
                         new AutoCompleteTask<>(
                                 new FakeAuthResult(mockFirebaseUser),

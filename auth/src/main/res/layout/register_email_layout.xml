@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <RelativeLayout
-                  style="@style/FirebaseUI.WrapperStyle"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content">
+        style="@style/FirebaseUI.WrapperStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <!--
             Since the TextInputLayouts change size based on whether or not an error
             is showing we use a relative layout to position them absolutely
@@ -16,9 +16,9 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/email_layout"
             style="@style/FirebaseUI.Text.TextInputLayout"
-            android:paddingTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="16dp"
             app:errorTextAppearance="@style/FirebaseUI.Text.ErrorText"
             app:hintTextAppearance="@style/FirebaseUI.Text.HintText">
 
@@ -27,8 +27,8 @@
                 style="@style/FirebaseUI.EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
                 android:hint="@string/email_hint"
+                android:inputType="textEmailAddress"
                 />
         </android.support.design.widget.TextInputLayout>
 
@@ -47,8 +47,8 @@
                 style="@style/FirebaseUI.EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
                 android:hint="@string/name_hint"
+                android:inputType="textPersonName"
                 />
         </android.support.design.widget.TextInputLayout>
 
@@ -63,8 +63,8 @@
             app:hintTextAppearance="@style/FirebaseUI.Text.HintText">
 
             <EditText
-                style="@style/FirebaseUI.EditText.PasswordField"
                 android:id="@+id/password"
+                style="@style/FirebaseUI.EditText.PasswordField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 />
@@ -72,28 +72,29 @@
         </android.support.design.widget.TextInputLayout>
 
         <ImageView
-            style="@style/FirebaseUI.ImageView.VisibilityToggle"
             android:id="@+id/toggle_visibility"
+            style="@style/FirebaseUI.ImageView.VisibilityToggle"
             android:layout_alignEnd="@id/password_layout"
-            android:paddingTop="242dp"
-            android:layout_alignRight="@id/password_layout">
+            android:layout_alignRight="@id/password_layout"
+            android:contentDescription="@string/toggle_password"
+            android:paddingTop="242dp">
         </ImageView>
 
         <TextView
             android:id="@+id/create_account_text"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_marginTop="336dp"
             style="@style/FirebaseUI.Text.BodyText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="336dp"
             />
 
 
         <Button
-            style="@style/FirebaseUI.Button.NextButton"
-            android:layout_below="@id/create_account_text"
             android:id="@+id/button_create"
+            style="@style/FirebaseUI.Button.NextButton"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:text="@string/button_text_save"
-            />
+            android:layout_below="@id/create_account_text"
+            android:text="@string/button_text_save"/>
     </RelativeLayout>
 </ScrollView>

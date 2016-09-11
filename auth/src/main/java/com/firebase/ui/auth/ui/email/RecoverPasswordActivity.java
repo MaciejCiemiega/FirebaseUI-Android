@@ -44,6 +44,11 @@ public class RecoverPasswordActivity extends AppCompatBase implements View.OnCli
     private EditText mEmailEditText;
     private EmailFieldValidator mEmailFieldValidator;
 
+    public static Intent createIntent(Context context, FlowParameters flowParams, String email) {
+        return ActivityHelper.createBaseIntent(context, RecoverPasswordActivity.class, flowParams)
+                .putExtra(ExtraConstants.EXTRA_EMAIL, email);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,7 +102,6 @@ public class RecoverPasswordActivity extends AppCompatBase implements View.OnCli
         }
     }
 
-
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.button_done) {
@@ -107,10 +111,5 @@ public class RecoverPasswordActivity extends AppCompatBase implements View.OnCli
             mActivityHelper.showLoadingDialog(R.string.progress_dialog_sending);
             next(mEmailEditText.getText().toString());
         }
-    }
-
-    public static Intent createIntent(Context context, FlowParameters flowParams, String email) {
-        return ActivityHelper.createBaseIntent(context, RecoverPasswordActivity.class, flowParams)
-                .putExtra(ExtraConstants.EXTRA_EMAIL, email);
     }
 }

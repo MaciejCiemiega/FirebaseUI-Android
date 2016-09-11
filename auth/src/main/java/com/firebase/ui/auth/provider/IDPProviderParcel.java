@@ -20,20 +20,12 @@ import android.os.Parcelable;
 
 public class IDPProviderParcel implements Parcelable {
 
-    private final String mProviderId;
-    private final Bundle mProviderExtra;
-
-    public IDPProviderParcel(String providerId, Bundle providerExtra) {
-        mProviderId = providerId;
-        mProviderExtra = providerExtra;
-    }
-
     public static final Creator<IDPProviderParcel> CREATOR = new Creator<IDPProviderParcel>() {
         @Override
         public IDPProviderParcel createFromParcel(Parcel in) {
             return new IDPProviderParcel(
                     in.readString(),
-                    in.readBundle()
+                    in.readBundle(getClass().getClassLoader())
             );
         }
 
@@ -42,6 +34,13 @@ public class IDPProviderParcel implements Parcelable {
             return new IDPProviderParcel[size];
         }
     };
+    private final String mProviderId;
+    private final Bundle mProviderExtra;
+
+    public IDPProviderParcel(String providerId, Bundle providerExtra) {
+        mProviderId = providerId;
+        mProviderExtra = providerExtra;
+    }
 
     public String getProviderType() {
         return mProviderId;

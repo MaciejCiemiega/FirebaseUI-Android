@@ -64,10 +64,7 @@ public class FirebaseAuthWrapperImpl
     @Override
     @WorkerThread
     public boolean isExistingAccount(@Nullable final String email) {
-        if (email == null) {
-            return false;
-        }
-        return hasProviders(await(mFirebaseAuth.fetchProvidersForEmail(email)));
+        return email != null && hasProviders(await(mFirebaseAuth.fetchProvidersForEmail(email)));
     }
 
     @Override
@@ -144,7 +141,7 @@ public class FirebaseAuthWrapperImpl
         return isPlayServicesAvailable(context, GoogleApiAvailability.getInstance());
     }
 
-    protected boolean isPlayServicesAvailable(
+    boolean isPlayServicesAvailable(
             Context context,
             GoogleApiAvailability apiAvailability) {
         int result = apiAvailability.isGooglePlayServicesAvailable(context);
@@ -167,8 +164,8 @@ public class FirebaseAuthWrapperImpl
 
         HintRequest hintRequest = new HintRequest.Builder()
                 .setHintPickerConfig(new CredentialPickerConfig.Builder()
-                        .setShowCancelButton(true)
-                        .build())
+                                             .setShowCancelButton(true)
+                                             .build())
                 .setEmailAddressIdentifierSupported(true)
                 .build();
 
@@ -185,17 +182,18 @@ public class FirebaseAuthWrapperImpl
     @Nullable
     public FirebaseUser linkWithCredential(
             @NonNull FirebaseUser user,
-            @NonNull AuthCredential credential)
-            throws ExecutionException {
+            @NonNull AuthCredential credential) {
         AuthResult linkResult = await(user.linkWithCredential(credential));
         return linkResult == null ? null : linkResult.getUser();
     }
 
     @Override
-    public void onConnected(@Nullable Bundle bundle) {}
+    public void onConnected(@Nullable Bundle bundle) {
+    }
 
     @Override
-    public void onConnectionSuspended(int cause) {}
+    public void onConnectionSuspended(int cause) {
+    }
 
     private <T> T await(@NonNull Task<T> curTask) {
         try {

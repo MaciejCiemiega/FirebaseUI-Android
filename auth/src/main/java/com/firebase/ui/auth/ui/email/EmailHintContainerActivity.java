@@ -32,6 +32,15 @@ public class EmailHintContainerActivity extends AppCompatBase {
     private static final int RC_HINT = 13;
     private AcquireEmailHelper mAcquireEmailHelper;
 
+    public static Intent createIntent(
+            Context context,
+            FlowParameters flowParams) {
+        return ActivityHelper.createBaseIntent(
+                context,
+                EmailHintContainerActivity.class,
+                flowParams);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +58,6 @@ public class EmailHintContainerActivity extends AppCompatBase {
             }
         }
         finish(RESULT_CANCELED, new Intent());
-        return;
     }
 
     @Override
@@ -71,14 +79,5 @@ public class EmailHintContainerActivity extends AppCompatBase {
         } else {
             mAcquireEmailHelper.onActivityResult(requestCode, resultCode, data);
         }
-    }
-
-    public static Intent createIntent(
-            Context context,
-            FlowParameters flowParams) {
-        return ActivityHelper.createBaseIntent(
-                context,
-                EmailHintContainerActivity.class,
-                flowParams);
     }
 }

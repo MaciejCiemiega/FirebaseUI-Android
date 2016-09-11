@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    style="@style/FirebaseUI.WrapperStyle">
+              style="@style/FirebaseUI.WrapperStyle"
+              android:orientation="vertical">
+
     <TextView
-        style="@style/FirebaseUI.Text.BodyText"
-        android:id="@+id/body_text"/>
+        android:id="@+id/body_text"
+        style="@style/FirebaseUI.Text.BodyText"/>
+
     <Button
-        style="@style/FirebaseUI.Button.AlertButton"
         android:id="@+id/button_done"
+        style="@style/FirebaseUI.Button.AlertButton"
         android:text="@string/button_done"
         />
 </LinearLayout>

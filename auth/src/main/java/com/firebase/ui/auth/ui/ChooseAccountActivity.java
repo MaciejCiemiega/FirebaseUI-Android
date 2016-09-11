@@ -66,6 +66,12 @@ public class ChooseAccountActivity extends ActivityBase {
     private CredentialsAPI mCredentialsApi;
     private PlayServicesHelper mPlayServicesHelper;
 
+    public static Intent createIntent(
+            Context context,
+            FlowParameters flowParams) {
+        return ActivityHelper.createBaseIntent(context, ChooseAccountActivity.class, flowParams);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
@@ -74,13 +80,13 @@ public class ChooseAccountActivity extends ActivityBase {
         mPlayServicesHelper = PlayServicesHelper.getInstance(this);
         boolean madeAvailable = mPlayServicesHelper
                 .makePlayServicesAvailable(this, RC_PLAY_SERVICES,
-                        new DialogInterface.OnCancelListener() {
-                            @Override
-                            public void onCancel(DialogInterface dialogInterface) {
-                                Log.w(TAG, "playServices:dialog.onCancel()");
-                                finish(RESULT_CANCELED, new Intent());
-                            }
-                        });
+                                           new DialogInterface.OnCancelListener() {
+                                               @Override
+                                               public void onCancel(DialogInterface dialogInterface) {
+                                                   Log.w(TAG, "playServices:dialog.onCancel()");
+                                                   finish(RESULT_CANCELED, new Intent());
+                                               }
+                                           });
 
         if (!madeAvailable) {
             Log.w(TAG, "playServices: could not make available.");
@@ -286,7 +292,7 @@ public class ChooseAccountActivity extends ActivityBase {
                 });
     }
 
-    protected void redirectToIdpSignIn(String email, String accountType) {
+    private void redirectToIdpSignIn(String email, String accountType) {
         Intent nextIntent;
         switch (accountType) {
             case IdentityProviders.GOOGLE:
@@ -310,11 +316,5 @@ public class ChooseAccountActivity extends ActivityBase {
                         mActivityHelper.getFlowParams());
         }
         this.startActivityForResult(nextIntent, RC_IDP_SIGNIN);
-    }
-
-    public static Intent createIntent(
-            Context context,
-            FlowParameters flowParams) {
-        return ActivityHelper.createBaseIntent(context, ChooseAccountActivity.class, flowParams);
     }
 }

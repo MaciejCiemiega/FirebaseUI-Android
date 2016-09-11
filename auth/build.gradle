@@ -57,4 +57,4 @@ javadoc.exclude([
         'com/firebase/ui/auth/ui/ExtraConstants',
         'com/firebase/ui/auth/ui/email/field_validators/**',
         'com/firebase/ui/auth/util/**',
-        ])
+])

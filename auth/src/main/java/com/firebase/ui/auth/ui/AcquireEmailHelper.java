@@ -31,16 +31,15 @@ import java.util.Arrays;
 import java.util.List;
 
 public class AcquireEmailHelper {
-    private static final String TAG = "AcquireEmailHelper";
-    public static final int RC_REGISTER_ACCOUNT = 14;
-    public static final int RC_WELCOME_BACK_IDP = 15;
     public static final int RC_SIGN_IN = 16;
-    public static final List<Integer> REQUEST_CODES = Arrays.asList(
+    private static final int RC_REGISTER_ACCOUNT = 14;
+    private static final int RC_WELCOME_BACK_IDP = 15;
+    private static final List<Integer> REQUEST_CODES = Arrays.asList(
             RC_REGISTER_ACCOUNT,
             RC_WELCOME_BACK_IDP,
             RC_SIGN_IN
     );
-
+    private static final String TAG = "AcquireEmailHelper";
     private ActivityHelper mActivityHelper;
 
     public AcquireEmailHelper(ActivityHelper activityHelper) {

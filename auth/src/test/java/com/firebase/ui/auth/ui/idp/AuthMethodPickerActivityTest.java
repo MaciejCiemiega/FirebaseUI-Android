@@ -69,6 +69,29 @@ import static org.mockito.Mockito.when;
         }, sdk = 21)
 public class AuthMethodPickerActivityTest {
 
+    private static void verifySaveCredentialIntent(
+            ShadowActivity.IntentForResult nextIntent,
+            String provider) {
+        assertEquals(
+                SaveCredentialsActivity.class.getName(),
+                nextIntent.intent.getComponent().getClassName());
+        assertEquals(
+                nextIntent.intent.getExtras().getString(ExtraConstants.EXTRA_EMAIL),
+                TestConstants.EMAIL);
+        assertEquals(
+                nextIntent.intent.getExtras().getString(ExtraConstants.EXTRA_NAME),
+                TestConstants.NAME);
+        assertEquals(
+                nextIntent.intent.getExtras().getString(ExtraConstants.EXTRA_PROFILE_PICTURE_URI),
+                TestConstants.PHOTO_URL);
+        assertEquals(
+                nextIntent.intent.getExtras().getString(ExtraConstants.EXTRA_PROVIDER),
+                provider);
+        assertEquals(
+                nextIntent.intent.getExtras().getString(ExtraConstants.EXTRA_PASSWORD),
+                null);
+    }
+
     @Before
     public void setUp() {
         PlayServicesHelper.sApiAvailability = TestHelper.makeMockGoogleApiAvailability();
@@ -85,12 +108,11 @@ public class AuthMethodPickerActivityTest {
                 createActivity(providers);
 
         assertEquals(providers.size(),
-                ((LinearLayout) authMethodPickerActivity.findViewById(R.id.btn_holder))
-                        .getChildCount());
+                     ((LinearLayout) authMethodPickerActivity.findViewById(R.id.btn_holder))
+                             .getChildCount());
         Button emailButton = (Button) authMethodPickerActivity.findViewById(R.id.email_provider);
         assertEquals(View.VISIBLE, emailButton.getVisibility());
     }
-
 
     @Test
     public void testEmailIsHidden() {
@@ -102,8 +124,8 @@ public class AuthMethodPickerActivityTest {
                 createActivity(providers);
 
         assertEquals(providers.size() + 1, // plus one due to the invisible email button
-                ((LinearLayout) authMethodPickerActivity.findViewById(R.id.btn_holder))
-                        .getChildCount());
+                     ((LinearLayout) authMethodPickerActivity.findViewById(R.id.btn_holder))
+                             .getChildCount());
         Button emailButton = (Button) authMethodPickerActivity.findViewById(R.id.email_provider);
         assertEquals(View.GONE, emailButton.getVisibility());
     }
@@ -124,7 +146,6 @@ public class AuthMethodPickerActivityTest {
                 EmailHintContainerActivity.class.getName(),
                 nextIntent.intent.getComponent().getClassName());
     }
-
 
     @Test
     @Config(shadows = {ActivityHelperShadow.class})
@@ -175,29 +196,6 @@ public class AuthMethodPickerActivityTest {
                 Shadows.shadowOf(authMethodPickerActivity).getNextStartedActivityForResult();
 
         verifySaveCredentialIntent(nextIntent, GoogleAuthProvider.PROVIDER_ID);
-    }
-
-    private static void verifySaveCredentialIntent(
-            ShadowActivity.IntentForResult nextIntent,
-            String provider) {
-        assertEquals(
-                SaveCredentialsActivity.class.getName(),
-                nextIntent.intent.getComponent().getClassName());
-        assertEquals(
-                nextIntent.intent.getExtras().getString(ExtraConstants.EXTRA_EMAIL),
-                TestConstants.EMAIL);
-        assertEquals(
-                nextIntent.intent.getExtras().getString(ExtraConstants.EXTRA_NAME),
-                TestConstants.NAME);
-        assertEquals(
-                nextIntent.intent.getExtras().getString(ExtraConstants.EXTRA_PROFILE_PICTURE_URI),
-                TestConstants.PHOTO_URL);
-        assertEquals(
-                nextIntent.intent.getExtras().getString(ExtraConstants.EXTRA_PROVIDER),
-                provider);
-        assertEquals(
-                nextIntent.intent.getExtras().getString(ExtraConstants.EXTRA_PASSWORD),
-                null);
     }
 
     private AuthMethodPickerActivity createActivity(List<String> providers) {

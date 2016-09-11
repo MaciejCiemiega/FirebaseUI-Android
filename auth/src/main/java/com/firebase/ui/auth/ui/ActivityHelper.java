@@ -30,13 +30,24 @@ import com.google.firebase.auth.FirebaseUser;
 import static com.firebase.ui.auth.util.Preconditions.checkNotNull;
 
 public class ActivityHelper {
+    private final FlowParameters mFlowParams;
     private ProgressDialog mProgressDialog;
     private Activity mActivity;
-    private final FlowParameters mFlowParams;
 
     public ActivityHelper(Activity activity, Intent intent) {
         mActivity = activity;
         mFlowParams = intent.getParcelableExtra(ExtraConstants.EXTRA_FLOW_PARAMS);
+    }
+
+    public static Intent createBaseIntent(
+            @NonNull Context context,
+            @NonNull Class<? extends Activity> target,
+            @NonNull FlowParameters flowParams) {
+        return new Intent(
+                checkNotNull(context, "context cannot be null"),
+                checkNotNull(target, "target activity cannot be null"))
+                .putExtra(ExtraConstants.EXTRA_FLOW_PARAMS,
+                          checkNotNull(flowParams, "flowParams cannot be null"));
     }
 
     public void configureTheme() {
@@ -54,7 +65,7 @@ public class ActivityHelper {
         return mFlowParams;
     }
 
-    public void showLoadingDialog(String message) {
+    private void showLoadingDialog(String message) {
         dismissDialog();
         mProgressDialog = ProgressDialog.show(mActivity, "", message, true);
     }
@@ -80,7 +91,7 @@ public class ActivityHelper {
         return mFlowParams.appName;
     }
 
-    public FirebaseApp getFirebaseApp() {
+    private FirebaseApp getFirebaseApp() {
         return FirebaseApp.getInstance(mFlowParams.appName);
     }
 
@@ -94,16 +105,5 @@ public class ActivityHelper {
 
     public FirebaseUser getCurrentUser() {
         return getFirebaseAuth().getCurrentUser();
-    }
-
-    public static Intent createBaseIntent(
-            @NonNull Context context,
-            @NonNull Class<? extends Activity> target,
-            @NonNull FlowParameters flowParams) {
-        return new Intent(
-                checkNotNull(context, "context cannot be null"),
-                checkNotNull(target, "target activity cannot be null"))
-                .putExtra(ExtraConstants.EXTRA_FLOW_PARAMS,
-                        checkNotNull(flowParams, "flowParams cannot be null"));
     }
 }

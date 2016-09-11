@@ -38,7 +38,7 @@ public class GoogleProviderShadow {
     private IDPProvider.IDPCallback mCallback;
 
     public GoogleProviderShadow() {
-        if(mMockIdpResponseBundle == null) {
+        if (mMockIdpResponseBundle == null) {
             mMockIdpResponseBundle = mock(Bundle.class);
         }
         if (mMockIdpResponse == null) {
@@ -46,11 +46,12 @@ public class GoogleProviderShadow {
             when(mMockIdpResponse.getProviderType()).thenReturn(GoogleAuthProvider.PROVIDER_ID);
             when(mMockIdpResponse.getResponse()).thenReturn(mMockIdpResponseBundle);
             when(mMockIdpResponseBundle
-                    .getString(GoogleProvider.TOKEN_KEY)).thenReturn(FAKE_TOKEN);
+                         .getString(GoogleProvider.TOKEN_KEY)).thenReturn(FAKE_TOKEN);
         }
     }
 
-    public void __constructor__(Activity activity, IDPProviderParcel parcel, String email) {}
+    public void __constructor__(Activity activity, IDPProviderParcel parcel, String email) {
+    }
 
 
     @Implementation

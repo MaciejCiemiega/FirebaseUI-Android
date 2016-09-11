@@ -39,7 +39,7 @@ public class FacebookProviderShadow {
     private IDPProvider.IDPCallback mCallback;
 
     public FacebookProviderShadow() {
-        if(mMockIdpResponseBundle == null) {
+        if (mMockIdpResponseBundle == null) {
             mMockIdpResponseBundle = mock(Bundle.class);
         }
         if (mMockIdpResponse == null) {
@@ -47,11 +47,12 @@ public class FacebookProviderShadow {
             when(mMockIdpResponse.getProviderType()).thenReturn(FacebookAuthProvider.PROVIDER_ID);
             when(mMockIdpResponse.getResponse()).thenReturn(mMockIdpResponseBundle);
             when(mMockIdpResponseBundle
-                    .getString(FacebookProvider.ACCESS_TOKEN)).thenReturn(FAKE_ACCESS_TOKEN);
+                         .getString(FacebookProvider.ACCESS_TOKEN)).thenReturn(FAKE_ACCESS_TOKEN);
         }
     }
 
-    public void __constructor__(Activity activity, IDPProviderParcel parcel, String email) {}
+    public void __constructor__(Activity activity, IDPProviderParcel parcel, String email) {
+    }
 
     @Implementation
     public void setAuthenticationCallback(IDPProvider.IDPCallback idpCallback) {

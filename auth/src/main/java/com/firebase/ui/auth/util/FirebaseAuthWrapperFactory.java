@@ -32,7 +32,7 @@ public class FirebaseAuthWrapperFactory {
     /**
      * Produces a {@link FirebaseAuthWrapper} given a {@link FirebaseApp} instance.
      */
-    public static FirebaseAuthWrapper getFirebaseAuthWrapper(FirebaseApp firebaseApp) {
+    private static FirebaseAuthWrapper getFirebaseAuthWrapper(FirebaseApp firebaseApp) {
         return new FirebaseAuthWrapperImpl(FirebaseAuth.getInstance(firebaseApp));
     }
 }

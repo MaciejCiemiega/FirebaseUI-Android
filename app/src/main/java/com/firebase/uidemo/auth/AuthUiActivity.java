@@ -39,23 +39,25 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AuthUiActivity extends AppCompatActivity {
-
-    private static final String TAG = "AuthUIActivity";
-
     private static final String UNCHANGED_CONFIG_VALUE = "CHANGE-ME";
-
-    private static final String GOOGLE_TOS_URL =
-            "https://www.google.com/policies/terms/";
-    private static final String FIREBASE_TOS_URL =
-            "https://www.firebase.com/terms/terms-of-service.html";
-
+    private static final String GOOGLE_TOS_URL = "https://www.google.com/policies/terms/";
+    private static final String FIREBASE_TOS_URL = "https://www.firebase.com/terms/terms-of-service.html";
     private static final int RC_SIGN_IN = 100;
-
-    @BindView(R.id.default_theme)
-    RadioButton mUseDefaultTheme;
 
     @BindView(R.id.green_theme)
     RadioButton mUseGreenTheme;
+
+    @BindView(R.id.firebase_tos)
+    RadioButton mUseFirebaseTos;
+
+    @BindView(R.id.sign_in)
+    Button mSignIn;
+
+    @BindView(R.id.no_logo)
+    RadioButton mNoLogo;
+
+    @BindView(R.id.default_theme)
+    RadioButton mUseDefaultTheme;
 
     @BindView(R.id.purple_theme)
     RadioButton mUsePurpleTheme;
@@ -72,12 +74,6 @@ public class AuthUiActivity extends AppCompatActivity {
     @BindView(R.id.google_tos)
     RadioButton mUseGoogleTos;
 
-    @BindView(R.id.firebase_tos)
-    RadioButton mUseFirebaseTos;
-
-    @BindView(R.id.sign_in)
-    Button mSignIn;
-
     @BindView(android.R.id.content)
     View mRootView;
 
@@ -87,11 +83,14 @@ public class AuthUiActivity extends AppCompatActivity {
     @BindView(R.id.google_logo)
     RadioButton mGoogleLogo;
 
-    @BindView(R.id.no_logo)
-    RadioButton mNoLogo;
-
     @BindView(R.id.smartlock_enabled)
     CheckBox mEnableSmartLock;
+
+    public static Intent createIntent(Context context) {
+        Intent in = new Intent();
+        in.setClass(context, AuthUiActivity.class);
+        return in;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -231,11 +230,5 @@ public class AuthUiActivity extends AppCompatActivity {
     @MainThread
     private void showSnackbar(@StringRes int errorMessageRes) {
         Snackbar.make(mRootView, errorMessageRes, Snackbar.LENGTH_LONG).show();
-    }
-
-    public static Intent createIntent(Context context) {
-        Intent in = new Intent();
-        in.setClass(context, AuthUiActivity.class);
-        return in;
     }
 }

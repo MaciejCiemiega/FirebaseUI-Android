@@ -40,7 +40,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         }
     }
 
-    public static FirebaseApp initializeApp(Context context) {
+    private static FirebaseApp initializeApp(Context context) {
         return FirebaseApp.initializeApp(context, new FirebaseOptions.Builder()
                 .setApplicationId("foo-bar")
                 .setDatabaseUrl("https://firebaseui-tests.firebaseio-demo.com/")

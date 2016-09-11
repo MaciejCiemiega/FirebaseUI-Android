@@ -34,6 +34,15 @@ public class ConfirmRecoverPasswordActivity extends AppCompatActivity
 
     private ActivityHelper mActivityHelper;
 
+    public static Intent createIntent(
+            Context context,
+            FlowParameters flowParams,
+            String email) {
+        return ActivityHelper.createBaseIntent(context, ConfirmRecoverPasswordActivity.class,
+                                               flowParams)
+                .putExtra(ExtraConstants.EXTRA_EMAIL, email);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,15 +65,6 @@ public class ConfirmRecoverPasswordActivity extends AppCompatActivity
         if (view.getId() == R.id.button_done) {
             finish(RESULT_OK, new Intent());
         }
-    }
-
-    public static Intent createIntent(
-            Context context,
-            FlowParameters flowParams,
-            String email) {
-        return ActivityHelper.createBaseIntent(context, ConfirmRecoverPasswordActivity.class,
-                flowParams)
-                .putExtra(ExtraConstants.EXTRA_EMAIL, email);
     }
 
     private void finish(int resultCode, Intent intent) {

@@ -19,7 +19,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 public class ActivityBase extends Activity {
-    protected ActivityHelper mActivityHelper;
+    ActivityHelper mActivityHelper;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -28,7 +28,7 @@ public class ActivityBase extends Activity {
         mActivityHelper.configureTheme();
     }
 
-    public void finish(int resultCode, Intent intent) {
+    void finish(int resultCode, Intent intent) {
         mActivityHelper.finish(resultCode, intent);
     }
 

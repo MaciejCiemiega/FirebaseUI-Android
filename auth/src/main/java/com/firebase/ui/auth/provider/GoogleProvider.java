@@ -57,7 +57,7 @@ public class GoogleProvider implements
         GoogleSignInOptions googleSignInOptions;
 
         GoogleSignInOptions.Builder builder = new GoogleSignInOptions.Builder(GoogleSignInOptions
-                .DEFAULT_SIGN_IN)
+                                                                                      .DEFAULT_SIGN_IN)
                 .requestEmail()
                 .requestIdToken(mClientId);
 
@@ -78,15 +78,6 @@ public class GoogleProvider implements
                 .build();
     }
 
-    public String getName(Context context) {
-        return context.getResources().getString(R.string.idp_name_google);
-    }
-
-    @Override
-    public String getProviderId() {
-        return GoogleAuthProvider.PROVIDER_ID;
-    }
-
     public static IDPProviderParcel createParcel(String clientId) {
         Bundle extra = new Bundle();
         extra.putString(CLIENT_ID_KEY, clientId);
@@ -96,6 +87,15 @@ public class GoogleProvider implements
     public static AuthCredential createAuthCredential(IDPResponse response) {
         Bundle bundle = response.getResponse();
         return GoogleAuthProvider.getCredential(bundle.getString(TOKEN_KEY), null);
+    }
+
+    public String getName(Context context) {
+        return context.getResources().getString(R.string.idp_name_google);
+    }
+
+    @Override
+    public String getProviderId() {
+        return GoogleAuthProvider.PROVIDER_ID;
     }
 
     @Override

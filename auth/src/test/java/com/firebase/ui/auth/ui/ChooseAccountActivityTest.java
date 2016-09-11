@@ -56,9 +56,12 @@ import static org.mockito.Mockito.when;
 @Config(constants = BuildConfig.class, shadows = {ActivityHelperShadow.class}, sdk = 21)
 public class ChooseAccountActivityTest {
     private FirebaseApp mFirebaseApp;
-    @Mock private CredentialsAPI mCredentialsAPI;
-    @Mock private FirebaseAuth mFirebaseAuth;
-    @Mock private ActivityHelper mActivityHelper;
+    @Mock
+    private CredentialsAPI mCredentialsAPI;
+    @Mock
+    private FirebaseAuth mFirebaseAuth;
+    @Mock
+    private ActivityHelper mActivityHelper;
 
     @Before
     public void setUp() {

@@ -31,7 +31,7 @@ public class LoginManagerShadow {
         // Check for minimum permission set
         if (!(permissions.contains("email") && permissions.contains("public_profile"))) {
             throw new IllegalArgumentException("Facebook permissions must contain email and " +
-                    "public_profile.");
+                                                       "public_profile.");
         }
 
         // Call back with success

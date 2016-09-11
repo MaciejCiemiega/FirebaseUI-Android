@@ -33,7 +33,7 @@ public class AppCompatBase extends android.support.v7.app.AppCompatActivity {
         mActivityHelper.dismissDialog();
     }
 
-    public void finish(int resultCode, Intent intent) {
+    protected void finish(int resultCode, Intent intent) {
         mActivityHelper.finish(resultCode, intent);
     }
 

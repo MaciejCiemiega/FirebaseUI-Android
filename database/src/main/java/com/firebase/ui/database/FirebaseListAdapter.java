@@ -20,9 +20,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 
 /**
@@ -31,7 +31,7 @@ import com.google.firebase.database.Query;
  * class type. Extend this class and provide an implementation of <code>populateView</code>, which will be given an
  * instance of your list item mLayout and an instance your class that holds your data. Simply populate the view however
  * you like and this class will handle updating the list as the data changes.
- *
+ * <p>
  * <blockquote><pre>
  * {@code
  *     DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
@@ -52,9 +52,9 @@ import com.google.firebase.database.Query;
 public abstract class FirebaseListAdapter<T> extends BaseAdapter {
 
     private final Class<T> mModelClass;
-    protected int mLayout;
-    protected Activity mActivity;
-    FirebaseArray mSnapshots;
+    private int mLayout;
+    private Activity mActivity;
+    private FirebaseArray mSnapshots;
 
 
     /**
@@ -65,7 +65,7 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
      * @param ref         The Firebase location to watch for data changes. Can also be a slice of a location, using some
      *                    combination of <code>limit()</code>, <code>startAt()</code>, and <code>endAt()</code>,
      */
-    public FirebaseListAdapter(Activity activity, Class<T> modelClass, int modelLayout, Query ref) {
+    private FirebaseListAdapter(Activity activity, Class<T> modelClass, int modelLayout, Query ref) {
         mModelClass = modelClass;
         mLayout = modelLayout;
         mActivity = activity;
@@ -82,6 +82,7 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
             }
         });
     }
+
     /**
      * @param activity    The activity containing the ListView
      * @param modelClass  Firebase will marshall the data at a location into an instance of a class that you provide
@@ -116,11 +117,13 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
      * @param snapshot the DataSnapshot to extract the model from
      * @return the model extracted from the DataSnapshot
      */
-    protected T parseSnapshot(DataSnapshot snapshot) {
+    private T parseSnapshot(DataSnapshot snapshot) {
         return snapshot.getValue(mModelClass);
     }
 
-    public DatabaseReference getRef(int position) { return mSnapshots.getItem(position).getRef(); }
+    public DatabaseReference getRef(int position) {
+        return mSnapshots.getItem(position).getRef();
+    }
 
     @Override
     public long getItemId(int i) {
@@ -140,14 +143,14 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
         populateView(view, model, position);
         return view;
     }
-    
+
     /**
      * This method will be triggered in the event that this listener either failed at the server,
      * or is removed as a result of the security and Firebase Database rules.
      *
      * @param databaseError A description of the error that occurred
      */
-    protected void onCancelled(DatabaseError databaseError) {
+    void onCancelled(DatabaseError databaseError) {
         Log.w("FirebaseRecyclerAdapter", databaseError.toException());
     }
 
@@ -158,9 +161,9 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
      * <p>
      * Your implementation should populate the view using the data contained in the model.
      *
-     * @param v         The view to populate
-     * @param model     The object containing the data used to populate the view
-     * @param position  The position in the list of the view being populated
+     * @param v        The view to populate
+     * @param model    The object containing the data used to populate the view
+     * @param position The position in the list of the view being populated
      */
     abstract protected void populateView(View v, T model, int position);
 }

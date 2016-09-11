@@ -25,19 +25,13 @@ import java.util.ArrayList;
  * This class implements an array-like collection on top of a Firebase location.
  */
 class FirebaseArray implements ChildEventListener {
-    public interface OnChangedListener {
-        enum EventType { Added, Changed, Removed, Moved }
-        void onChanged(EventType type, int index, int oldIndex);
-        void onCancelled(DatabaseError databaseError);
-    }
-
     private Query mQuery;
     private OnChangedListener mListener;
     private ArrayList<DataSnapshot> mSnapshots;
 
     public FirebaseArray(Query ref) {
         mQuery = ref;
-        mSnapshots = new ArrayList<DataSnapshot>();
+        mSnapshots = new ArrayList<>();
         mQuery.addChildEventListener(this);
     }
 
@@ -49,6 +43,7 @@ class FirebaseArray implements ChildEventListener {
         return mSnapshots.size();
 
     }
+
     public DataSnapshot getItem(int index) {
         return mSnapshots.get(index);
     }
@@ -98,25 +93,33 @@ class FirebaseArray implements ChildEventListener {
     public void onCancelled(DatabaseError databaseError) {
         notifyCancelledListeners(databaseError);
     }
-    // End of ChildEventListener methods
 
     public void setOnChangedListener(OnChangedListener listener) {
         mListener = listener;
     }
-    
-    protected void notifyChangedListeners(OnChangedListener.EventType type, int index) {
+    // End of ChildEventListener methods
+
+    private void notifyChangedListeners(OnChangedListener.EventType type, int index) {
         notifyChangedListeners(type, index, -1);
     }
-    
-    protected void notifyChangedListeners(OnChangedListener.EventType type, int index, int oldIndex) {
+
+    private void notifyChangedListeners(OnChangedListener.EventType type, int index, int oldIndex) {
         if (mListener != null) {
             mListener.onChanged(type, index, oldIndex);
         }
     }
-    
-    protected void notifyCancelledListeners(DatabaseError databaseError) {
+
+    private void notifyCancelledListeners(DatabaseError databaseError) {
         if (mListener != null) {
             mListener.onCancelled(databaseError);
         }
+    }
+
+    public interface OnChangedListener {
+        void onChanged(EventType type, int index, int oldIndex);
+
+        void onCancelled(DatabaseError databaseError);
+
+        enum EventType {Added, Changed, Removed, Moved}
     }
 }

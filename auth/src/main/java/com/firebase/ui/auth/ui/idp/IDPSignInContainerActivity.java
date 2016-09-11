@@ -39,17 +39,28 @@ public class IDPSignInContainerActivity extends IDPBaseActivity implements IDPPr
     private static final int RC_WELCOME_BACK_IDP = 4;
     private static final int RC_SAVE_CREDENTIALS = 5;
     private IDPProvider mIDPProvider;
-    private String mProvider;
-    private String mEmail;
+
+    public static Intent createIntent(
+            Context context,
+            FlowParameters flowParams,
+            String provider,
+            String email) {
+        return ActivityHelper.createBaseIntent(
+                context,
+                IDPSignInContainerActivity.class,
+                flowParams)
+                .putExtra(ExtraConstants.EXTRA_PROVIDER, provider)
+                .putExtra(ExtraConstants.EXTRA_EMAIL, email);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mProvider = getIntent().getStringExtra(ExtraConstants.EXTRA_PROVIDER);
-        mEmail = getIntent().getStringExtra(ExtraConstants.EXTRA_EMAIL);
+        String provider = getIntent().getStringExtra(ExtraConstants.EXTRA_PROVIDER);
+        String email = getIntent().getStringExtra(ExtraConstants.EXTRA_EMAIL);
         IDPProviderParcel providerParcel = null;
         for (IDPProviderParcel parcel : mActivityHelper.getFlowParams().providerInfo) {
-            if (parcel.getProviderType().equalsIgnoreCase(mProvider)) {
+            if (parcel.getProviderType().equalsIgnoreCase(provider)) {
                 providerParcel = parcel;
                 break;
             }
@@ -59,10 +70,10 @@ public class IDPSignInContainerActivity extends IDPBaseActivity implements IDPPr
             finish(RESULT_CANCELED, new Intent());
             return;
         }
-        if (mProvider.equalsIgnoreCase(FacebookAuthProvider.PROVIDER_ID)) {
+        if (provider.equalsIgnoreCase(FacebookAuthProvider.PROVIDER_ID)) {
             mIDPProvider = new FacebookProvider(this, providerParcel);
-        } else if (mProvider.equalsIgnoreCase(GoogleAuthProvider.PROVIDER_ID)) {
-            mIDPProvider = new GoogleProvider(this, providerParcel, mEmail);
+        } else if (provider.equalsIgnoreCase(GoogleAuthProvider.PROVIDER_ID)) {
+            mIDPProvider = new GoogleProvider(this, providerParcel, email);
         }
         mIDPProvider.setAuthenticationCallback(this);
         mIDPProvider.startLogin(this);
@@ -101,18 +112,5 @@ public class IDPSignInContainerActivity extends IDPBaseActivity implements IDPPr
         } else {
             mIDPProvider.onActivityResult(requestCode, resultCode, data);
         }
-    }
-
-    public static Intent createIntent(
-            Context context,
-            FlowParameters flowParams,
-            String provider,
-            String email) {
-        return ActivityHelper.createBaseIntent(
-                context,
-                IDPSignInContainerActivity.class,
-                flowParams)
-                .putExtra(ExtraConstants.EXTRA_PROVIDER, provider)
-                .putExtra(ExtraConstants.EXTRA_EMAIL, email);
     }
 }

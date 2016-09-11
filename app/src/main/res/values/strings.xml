@@ -42,4 +42,5 @@
     <string name="configuration_required">Configuration is required - see README.md</string>
     <string name="other_options_header">Other Options:</string>
     <string name="enable_smartlock">Enable SmartLock for Passwords</string>
+    <string name="send">Send</string>
 </resources>

@@ -64,7 +64,7 @@ public interface FirebaseAuthWrapper {
     FirebaseUser linkWithCredential(
             FirebaseUser user,
             AuthCredential credential)
-            throws ExecutionException;
+            ;
 
     boolean isPlayServicesAvailable(Context context);
 

@@ -25,7 +25,7 @@ import org.robolectric.annotation.Implements;
 @Implements(ActivityHelper.class)
 public class ActivityHelperShadow {
     public static FirebaseAuth firebaseAuth;
-    public static CredentialsApi credentialsApi;
+    private static CredentialsApi credentialsApi;
 
     public ActivityHelperShadow() {
         if (firebaseAuth == null) {

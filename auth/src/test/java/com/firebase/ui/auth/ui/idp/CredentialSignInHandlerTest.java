@@ -73,7 +73,8 @@ public class CredentialSignInHandlerTest {
     private static final String LINKING_ERROR = "ERROR_TEST_LINKING";
     private static final String LINKING_EXPLANATION = "Test explanation";
 
-    @Mock private CredentialsAPI mCredentialsAPI;
+    @Mock
+    private CredentialsAPI mCredentialsAPI;
     private FirebaseApp mFirebaseApp;
 
     @Before
@@ -230,6 +231,6 @@ public class CredentialSignInHandlerTest {
         assertEquals(
                 TestConstants.EMAIL,
                 ((IDPResponse) capturedIntent.getExtras().getParcelable(ExtraConstants
-                        .EXTRA_IDP_RESPONSE)).getEmail());
+                                                                                .EXTRA_IDP_RESPONSE)).getEmail());
     }
 }

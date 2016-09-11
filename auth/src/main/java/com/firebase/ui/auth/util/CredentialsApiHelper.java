@@ -50,6 +50,19 @@ public class CredentialsApiHelper {
         mClientHelper = gacHelper;
     }
 
+    public static CredentialsApiHelper getInstance(Activity activity) {
+        // Get a task helper with the Credentials Api
+        GoogleApiClientTaskHelper taskHelper = GoogleApiClientTaskHelper.getInstance(activity);
+        taskHelper.getBuilder()
+                .addApi(Auth.CREDENTIALS_API);
+
+        return getInstance(taskHelper);
+    }
+
+    public static CredentialsApiHelper getInstance(GoogleApiClientTaskHelper taskHelper) {
+        return new CredentialsApiHelper(taskHelper);
+    }
+
     public CredentialRequest createCredentialRequest(List<IDPProviderParcel> providers) {
         boolean emailSupported = false;
         ArrayList<String> idps = new ArrayList<>();
@@ -76,8 +89,7 @@ public class CredentialsApiHelper {
                     @Override
                     protected void process(
                             final GoogleApiClient client,
-                            final TaskCompletionSource<CredentialRequestResult> source)
-                            throws Exception {
+                            final TaskCompletionSource<CredentialRequestResult> source) {
                         Auth.CredentialsApi.request(client, request)
                                 .setResultCallback(new TaskResultCaptor<>(source));
                     }
@@ -90,10 +102,9 @@ public class CredentialsApiHelper {
                     @Override
                     protected void process(
                             GoogleApiClient client,
-                            TaskCompletionSource<Status> source)
-                            throws Exception {
+                            TaskCompletionSource<Status> source) {
                         Auth.CredentialsApi.save(client, credential)
-                                .setResultCallback(new TaskResultCaptor<Status>(source));
+                                .setResultCallback(new TaskResultCaptor<>(source));
                     }
                 });
     }
@@ -104,8 +115,7 @@ public class CredentialsApiHelper {
                     @Override
                     protected void process(
                             GoogleApiClient client,
-                            TaskCompletionSource<PendingIntent> source)
-                            throws Exception {
+                            TaskCompletionSource<PendingIntent> source) {
                         source.setResult(Auth.CredentialsApi.getHintPickerIntent(client, request));
                     }
                 });
@@ -117,9 +127,9 @@ public class CredentialsApiHelper {
                     @Override
                     protected void process(
                             GoogleApiClient client,
-                            TaskCompletionSource<Status> source) throws Exception {
+                            TaskCompletionSource<Status> source) {
                         Auth.CredentialsApi.delete(client, credential)
-                                .setResultCallback(new TaskResultCaptor<Status>(source));
+                                .setResultCallback(new TaskResultCaptor<>(source));
                     }
                 });
     }
@@ -130,8 +140,7 @@ public class CredentialsApiHelper {
                     @Override
                     protected void process(
                             final GoogleApiClient client,
-                            final TaskCompletionSource<Status> source)
-                            throws Exception {
+                            final TaskCompletionSource<Status> source) {
                         Auth.CredentialsApi.disableAutoSignIn(client)
                                 .setResultCallback(new ResultCallback<Status>() {
                                     @Override
@@ -141,19 +150,6 @@ public class CredentialsApiHelper {
                                 });
                     }
                 });
-    }
-
-    public static CredentialsApiHelper getInstance(Activity activity) {
-        // Get a task helper with the Credentials Api
-        GoogleApiClientTaskHelper taskHelper = GoogleApiClientTaskHelper.getInstance(activity);
-        taskHelper.getBuilder()
-                .addApi(Auth.CREDENTIALS_API);
-
-        return getInstance(taskHelper);
-    }
-
-    public static CredentialsApiHelper getInstance(GoogleApiClientTaskHelper taskHelper) {
-        return new CredentialsApiHelper(taskHelper);
     }
 
     private static abstract class ExceptionForwardingContinuation<InT, OutT>
@@ -169,7 +165,7 @@ public class CredentialsApiHelper {
             return source.getTask();
         }
 
-        protected abstract void process(InT in, TaskCompletionSource<OutT> result) throws Exception;
+        protected abstract void process(InT in, TaskCompletionSource<OutT> result);
     }
 
     private static final class TaskResultCaptor<R extends Result> implements ResultCallback<R> {

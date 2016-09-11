@@ -43,8 +43,8 @@ import java.util.List;
 public class FacebookProvider implements IDPProvider, FacebookCallback<LoginResult> {
     public static final String ACCESS_TOKEN = "facebook_access_token";
 
-    protected static final String ERROR = "err";
-    protected static final String ERROR_MSG = "err_msg";
+    private static final String ERROR = "err";
+    private static final String ERROR_MSG = "err_msg";
 
     private static final String TAG = "FacebookProvider";
     private static final String APPLICATION_ID = "application_id";
@@ -54,7 +54,7 @@ public class FacebookProvider implements IDPProvider, FacebookCallback<LoginResu
     private CallbackManager mCallbackManager;
     private IDPCallback mCallbackObject;
 
-    public FacebookProvider (Context appContext, IDPProviderParcel facebookParcel) {
+    public FacebookProvider(Context appContext, IDPProviderParcel facebookParcel) {
         mCallbackManager = CallbackManager.Factory.create();
         String applicationId = facebookParcel.getProviderExtra().getString(APPLICATION_ID);
         FacebookSdk.sdkInitialize(appContext);
@@ -65,6 +65,14 @@ public class FacebookProvider implements IDPProvider, FacebookCallback<LoginResu
         Bundle extra = new Bundle();
         extra.putString(APPLICATION_ID, applicationId);
         return new IDPProviderParcel(FacebookAuthProvider.PROVIDER_ID, extra);
+    }
+
+    public static AuthCredential createAuthCredential(IDPResponse response) {
+        if (!response.getProviderType().equals(FacebookAuthProvider.PROVIDER_ID)) {
+            return null;
+        }
+        return FacebookAuthProvider
+                .getCredential(response.getResponse().getString(ACCESS_TOKEN));
     }
 
     @Override
@@ -141,14 +149,6 @@ public class FacebookProvider implements IDPProvider, FacebookCallback<LoginResu
         Bundle response = new Bundle();
         response.putString(ACCESS_TOKEN, loginResult.getAccessToken().getToken());
         return new IDPResponse(FacebookAuthProvider.PROVIDER_ID, email, response);
-    }
-
-    public static AuthCredential createAuthCredential(IDPResponse response) {
-        if (!response.getProviderType().equals(FacebookAuthProvider.PROVIDER_ID)) {
-            return null;
-        }
-        return FacebookAuthProvider
-                .getCredential(response.getResponse().getString(ACCESS_TOKEN));
     }
 
     @Override

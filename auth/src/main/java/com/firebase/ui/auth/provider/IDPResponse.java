@@ -20,6 +20,21 @@ import android.os.Parcelable;
 
 public class IDPResponse implements Parcelable {
 
+    public static final Creator<IDPResponse> CREATOR = new Creator<IDPResponse>() {
+        @Override
+        public IDPResponse createFromParcel(Parcel in) {
+            return new IDPResponse(
+                    in.readString(),
+                    in.readString(),
+                    in.readBundle(getClass().getClassLoader())
+            );
+        }
+
+        @Override
+        public IDPResponse[] newArray(int size) {
+            return new IDPResponse[size];
+        }
+    };
     private final String mProviderId;
     private final String mEmail;
     private final Bundle mResponseBundle;
@@ -29,22 +44,6 @@ public class IDPResponse implements Parcelable {
         mEmail = email;
         mResponseBundle = response;
     }
-
-    public static final Creator<IDPResponse> CREATOR = new Creator<IDPResponse>() {
-        @Override
-        public IDPResponse createFromParcel(Parcel in) {
-            return new IDPResponse(
-                    in.readString(),
-                    in.readString(),
-                    in.readBundle()
-            );
-        }
-
-        @Override
-        public IDPResponse[] newArray(int size) {
-            return new IDPResponse[size];
-        }
-    };
 
     public String getProviderType() {
         return mProviderId;

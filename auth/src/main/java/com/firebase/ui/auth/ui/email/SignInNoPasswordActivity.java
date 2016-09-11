@@ -36,6 +36,14 @@ public class SignInNoPasswordActivity extends AppCompatBase implements View.OnCl
     private EmailFieldValidator mEmailFieldValidator;
     private AcquireEmailHelper mAcquireEmailHelper;
 
+    public static Intent createIntent(
+            Context context,
+            FlowParameters flowParams,
+            String email) {
+        return ActivityHelper.createBaseIntent(context, SignInNoPasswordActivity.class, flowParams)
+                .putExtra(ExtraConstants.EXTRA_EMAIL, email);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,13 +79,5 @@ public class SignInNoPasswordActivity extends AppCompatBase implements View.OnCl
         mActivityHelper.showLoadingDialog(R.string.progress_dialog_loading);
         String email = mEmailEditText.getText().toString();
         mAcquireEmailHelper.checkAccountExists(email);
-    }
-
-    public static Intent createIntent(
-            Context context,
-            FlowParameters flowParams,
-            String email) {
-        return ActivityHelper.createBaseIntent(context, SignInNoPasswordActivity.class, flowParams)
-                .putExtra(ExtraConstants.EXTRA_EMAIL, email);
     }
 }

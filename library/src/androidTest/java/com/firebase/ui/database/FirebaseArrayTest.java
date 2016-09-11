@@ -35,6 +35,51 @@ public class FirebaseArrayTest extends AndroidTestCase {
     private DatabaseReference mRef;
     private FirebaseArray mArray;
 
+    private static boolean isValuesEqual(FirebaseArray array, int[] expected) {
+        if (array.getCount() != expected.length) return false;
+        for (int i = 0; i < array.getCount(); i++) {
+            if (!array.getItem(i).getValue(Integer.class).equals(expected[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static void print(FirebaseArray array) {
+        for (int i = 0; i < array.getCount(); i++) {
+            System.out.println(i + ": key=" + array.getItem(i).getKey() + " value=" + array.getItem(i).getValue());
+
+        }
+    }
+
+    private static void runAndWaitUntil(final FirebaseArray array,
+                                        Query ref,
+                                        Runnable task,
+                                        Callable<Boolean> done) throws InterruptedException {
+        final java.util.concurrent.Semaphore semaphore = new java.util.concurrent.Semaphore(0);
+        array.setOnChangedListener(new FirebaseArray.OnChangedListener() {
+            public void onChanged(FirebaseArray.OnChangedListener.EventType type, int index, int oldIndex) {
+                semaphore.release();
+            }
+        });
+        task.run();
+        boolean isDone = false;
+        long startedAt = System.currentTimeMillis();
+        while (!isDone && System.currentTimeMillis() - startedAt < 5000) {
+            semaphore.tryAcquire(1, TimeUnit.SECONDS);
+            try {
+                isDone = done.call();
+            } catch (Exception e) {
+                e.printStackTrace();
+                // and we're not done
+            }
+        }
+        if (!isDone) {
+            throw new AssertionFailedError();
+        }
+        array.setOnChangedListener(null);
+    }
+
     @Before
     public void setUp() throws Exception {
         FirebaseApp app = ApplicationTest.getAppInstance(getContext());
@@ -79,6 +124,7 @@ public class FirebaseArrayTest extends AndroidTestCase {
             }
         });
     }
+
     @Test
     public void testPushAppends() throws Exception {
         runAndWaitUntil(mArray, mRef, new Runnable() {
@@ -101,7 +147,9 @@ public class FirebaseArrayTest extends AndroidTestCase {
             }
         }, new Callable<Boolean>() {
             public Boolean call() throws Exception {
-                return mArray.getItem(3).getValue(Integer.class).equals(3) && mArray.getItem(0).getValue(Integer.class).equals(4);
+                return mArray.getItem(3).getValue(Integer.class).equals(3) && mArray.getItem(0)
+                        .getValue(Integer.class)
+                        .equals(4);
             }
         });
     }
@@ -119,49 +167,7 @@ public class FirebaseArrayTest extends AndroidTestCase {
         });
     }
 
-    private static boolean isValuesEqual(FirebaseArray array, int[] expected) {
-        if (array.getCount() != expected.length) return false;
-        for (int i=0; i < array.getCount(); i++) {
-            if (!array.getItem(i).getValue(Integer.class).equals(expected[i])) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     private Integer getIntValue(FirebaseArray array, int index) {
         return array.getItem(index).getValue(Integer.class);
-    }
-
-    private static void print(FirebaseArray array) {
-        for (int i=0; i < array.getCount(); i++) {
-            System.out.println(i+": key="+array.getItem(i).getKey()+" value="+array.getItem(i).getValue());
-
-        }
-    }
-
-    public static void runAndWaitUntil(final FirebaseArray array, Query ref, Runnable task, Callable<Boolean> done) throws InterruptedException {
-        final java.util.concurrent.Semaphore semaphore = new java.util.concurrent.Semaphore(0);
-        array.setOnChangedListener(new FirebaseArray.OnChangedListener() {
-            public void onChanged(FirebaseArray.OnChangedListener.EventType type, int index, int oldIndex) {
-                semaphore.release();
-            }
-        });
-        task.run();
-        boolean isDone = false;
-        long startedAt = System.currentTimeMillis();
-        while (!isDone && System.currentTimeMillis() - startedAt < 5000) {
-            semaphore.tryAcquire(1, TimeUnit.SECONDS);
-            try {
-                isDone = done.call();
-            } catch (Exception e) {
-                e.printStackTrace();
-                // and we're not done
-            }
-        }
-        if (!isDone) {
-            throw new AssertionFailedError();
-        }
-        array.setOnChangedListener(null);
     }
 }

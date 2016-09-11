@@ -57,6 +57,22 @@ public class SaveCredentialsActivity extends AppCompatBase
     private String mProfilePictureUri;
     private GoogleApiClient mCredentialsApiClient;
 
+    public static Intent createIntent(
+            Context context,
+            FlowParameters flowParams,
+            FirebaseUser user,
+            @Nullable String password,
+            @Nullable String provider) {
+
+        String photoUrl = user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : null;
+        return ActivityHelper.createBaseIntent(context, SaveCredentialsActivity.class, flowParams)
+                .putExtra(ExtraConstants.EXTRA_NAME, user.getDisplayName())
+                .putExtra(ExtraConstants.EXTRA_EMAIL, user.getEmail())
+                .putExtra(ExtraConstants.EXTRA_PASSWORD, password)
+                .putExtra(ExtraConstants.EXTRA_PROVIDER, provider)
+                .putExtra(ExtraConstants.EXTRA_PROFILE_PICTURE_URI, photoUrl);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +99,6 @@ public class SaveCredentialsActivity extends AppCompatBase
         mCredentialsApiClient.connect();
     }
 
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -97,7 +112,6 @@ public class SaveCredentialsActivity extends AppCompatBase
             mCredentialsApiClient.disconnect();
         }
     }
-
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -141,7 +155,6 @@ public class SaveCredentialsActivity extends AppCompatBase
         }
     }
 
-
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         if (BuildConfig.DEBUG) {
@@ -150,7 +163,8 @@ public class SaveCredentialsActivity extends AppCompatBase
         }
         PendingIntent resolution =
                 GoogleApiAvailability.getInstance().getErrorResolutionPendingIntent(this,
-                        connectionResult.getErrorCode(), RC_UPDATE_SERVICE);
+                                                                                    connectionResult.getErrorCode(),
+                                                                                    RC_UPDATE_SERVICE);
         try {
             startIntentSenderForResult(resolution.getIntentSender(), RC_UPDATE_SERVICE, null, 0, 0, 0);
         } catch (IntentSender.SendIntentException e) {
@@ -158,7 +172,6 @@ public class SaveCredentialsActivity extends AppCompatBase
             finish(RESULT_FIRST_USER, getIntent());
         }
     }
-
 
     @Override
     public void onResult(@NonNull Status status) {
@@ -205,21 +218,5 @@ public class SaveCredentialsActivity extends AppCompatBase
                 finish(RESULT_FIRST_USER, getIntent());
             }
         }
-    }
-
-    public static Intent createIntent(
-            Context context,
-            FlowParameters flowParams,
-            FirebaseUser user,
-            @Nullable String password,
-            @Nullable String provider) {
-
-        String photoUrl = user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : null;
-        return ActivityHelper.createBaseIntent(context, SaveCredentialsActivity.class, flowParams)
-                .putExtra(ExtraConstants.EXTRA_NAME, user.getDisplayName())
-                .putExtra(ExtraConstants.EXTRA_EMAIL, user.getEmail())
-                .putExtra(ExtraConstants.EXTRA_PASSWORD, password)
-                .putExtra(ExtraConstants.EXTRA_PROVIDER, provider)
-                .putExtra(ExtraConstants.EXTRA_PROFILE_PICTURE_URI, photoUrl);
     }
 }
