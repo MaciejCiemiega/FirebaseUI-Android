@@ -32,7 +32,7 @@ import org.robolectric.annotation.Config;
 import static junit.framework.Assert.assertEquals;
 
 @RunWith(CustomRobolectricGradleTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 21)
+@Config(constants = BuildConfig.class, sdk = 23)
 public class AuthUITest {
     private FirebaseApp mFirebaseApp;
 
